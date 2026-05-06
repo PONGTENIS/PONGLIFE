@@ -1,3 +1,4 @@
+'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 import { getSlots, fmtDate, dateKey, DAY_NAMES, DAY_FULL, MONTHS } from '../lib/schedule'
@@ -369,3 +370,4 @@ export default function Home() {
     </div>
   )
 }
+
