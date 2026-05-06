@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)file:///C:/Users/usuario/Downloads/index_2.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turnos - Tenis de Mesa</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+body{background:#f8f7f4;min-height:100vh;display:flex;justify-content:center;padding:2rem 1rem}
+.app{width:100%;max-width:680px}
+h1{font-size:22px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
+.sub{font-size:14px;color:#888;margin-bottom:1.5rem}
+.tabs{display:flex;border-bottom:1px solid #e5e2d9;margin-bottom:1.5rem}
+.tab{padding:10px 18px;font-size:14px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#888;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.active{color:#1D9E75;border-bottom-color:#1D9E75}
+.week-nav{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.week-nav button{background:transparent;border:1px solid #ddd;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:16px}
+.week-label{flex:1;text-align:center;font-size:14px;font-weight:500}
+.days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:1.5rem}
+.day-btn{border:1px solid #e5e2d9;border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;background:#fff}
+.day-btn:hover:not(.disabled){border-color:#9FE1CB;background:#f0faf5}
+.day-btn.selected{border:2px solid #1D9E75;background:#E1F5EE}
+.day-btn.disabled{opacity:.4;cursor:not-allowed}
+.day-name{font-size:10px;color:#888;text-transform:uppercase}
+.day-num{font-size:16px;font-weight:600;color:#1a1a1a;margin-top:2px}
+.day-avail{font-size:10px;color:#888;margin-top:2px}
+.slots-title{font-size:14px;font-weight:500;color:#555;margin-bottom:10px}
+.slots-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.5rem}
+.slot{border:1px solid #e5e2d9;border-radius:8px;padding:10px 6px;text-align:center;cursor:pointer;background:#fff;font-size:13px;font-weight:500}
+.slot:hover:not(.taken){border-color:#1D9E75;color:#0F6E56;background:#E1F5EE}
+.slot.sel{border:2px solid #1D9E75;background:#E1F5EE;color:#0F6E56}
+.slot.taken{background:#f4f3f0;color:#bbb;cursor:not-allowed;text-decoration:line-through}
+.summary{background:#E1F5EE;border:1px solid #9FE1CB;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#0F6E56}
+.form-card{background:#fff;border:1px solid #e5e2d9;border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.form-title{font-size:16px;font-weight:600;margin-bottom:1rem}
+.form-row{margin-bottom:12px}
+.form-row label{display:block;font-size:13px;color:#555;margin-bottom:4px}
+.form-row input{width:100%;padding:9px 12px;font-size:14px;border:1px solid #ddd;border-radius:8px}
+.form-row input:focus{outline:none;border-color:#1D9E75;box-shadow:0 0 0 3px rgba(29,158,117,.12)}
+.btn-confirm{width:100%;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
+.btn-confirm:disabled{background:#e0e0e0;color:#aaa;cursor:not-allowed}
+.success{background:#fff;border:1px solid #e5e2d9;border-radius:12px;padding:2rem;text-align:center;display:none}
+.success.show{display:block}
+.success-icon{width:56px;height:56px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:28px}
+.booking-box{background:#f8f7f4;border-radius:8px;padding:1rem;margin:1rem 0;font-size:15px;font-weight:500}
+.teal{color:#1D9E75}
+.btn-new{margin-top:1rem;padding:10px 24px;border:1px solid #ddd;border-radius:8px;background:transparent;cursor:pointer;font-size:14px}
+.admin-wrap{padding-top:.5rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
+.stat{background:#f8f7f4;border-radius:8px;padding:1rem;text-align:center}
+.stat-num{font-size:24px;font-weight:700}
+.stat-label{font-size:12px;color:#888;margin-top:2px}
+.filter-row{display:flex;gap:8px;margin-bottom:1rem}
+.filter-row select,.filter-row input{padding:7px 10px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff}
+.filter-row input{flex:1}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 10px;font-size:11px;font-weight:600;text-transform:uppercase;color:#888;border-bottom:1px solid #e5e2d9}
+td{padding:10px;border-bottom:1px solid #f0f0ec;vertical-align:middle}
+.badge{display:inline-block;font-size:11px;padding:2px 10px;border-radius:20px;font-weight:600}
+.badge-ok{background:#E1F5EE;color:#0F6E56}
+.badge-cancel{background:#FCEBEB;color:#791F1F}
+.btn-sm{padding:4px 10px;border:1px solid #ddd;border-radius:6px;font-size:12px;cursor:pointer;background:transparent}
+.btn-cancel{border-color:#ddd;color:#555}
+.btn-cancel:hover{border-color:#E24B4A;color:#E24B4A;background:#FCEBEB}
+.empty{text-align:center;padding:3rem;color:#888}
+.error-msg{background:#FCEBEB;border:1px solid #F7C1C1;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#791F1F}
+.login-card{background:#fff;border:1px solid #e5e2d9;border-radius:12px;padding:1.5rem;max-width:360px;margin:2rem auto}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="tabs">
+    <button class="tab active" onclick="setTab(&#39;client&#39;)">🏓 Reservar turno</button>
+    <button class="tab" onclick="setTab(&#39;admin&#39;)">⚙️ Panel admin</button>
+  </div>
+
+  <!-- CLIENT VIEW -->
+  <div id="client-view">
+    <h1>Reservá tu turno</h1>
+    <p class="sub">Tenis de mesa · Turnos de 1 hora · Lun–Vie 14–19:30 · Sáb 8–17 · Dom 9–14</p>
+
+    <div id="calendar-view">
+      <div class="week-nav">
+        <button onclick="changeWeek(-1)">‹</button>
+        <span class="week-label" id="week-label">4 mayo – 10 mayo 2026</span>
+        <button onclick="changeWeek(1)">›</button>
+      </div>
+      <div class="days-grid" id="days-grid"><div class="day-btn disabled " onclick="">
+      <div class="day-name">Lun</div>
+      <div class="day-num">4</div>
+      
+    </div><div class="day-btn disabled " onclick="">
+      <div class="day-name">Mar</div>
+      <div class="day-num">5</div>
+      
+    </div><div class="day-btn  " onclick="selectDay(&#39;2026-05-06&#39;)">
+      <div class="day-name">Mié</div>
+      <div class="day-num">6</div>
+      <div class="day-avail">5 libres</div>
+    </div><div class="day-btn  " onclick="selectDay(&#39;2026-05-07&#39;)">
+      <div class="day-name">Jue</div>
+      <div class="day-num">7</div>
+      <div class="day-avail">5 libres</div>
+    </div><div class="day-btn  " onclick="selectDay(&#39;2026-05-08&#39;)">
+      <div class="day-name">Vie</div>
+      <div class="day-num">8</div>
+      <div class="day-avail">5 libres</div>
+    </div><div class="day-btn  " onclick="selectDay(&#39;2026-05-09&#39;)">
+      <div class="day-name">Sáb</div>
+      <div class="day-num">9</div>
+      <div class="day-avail">9 libres</div>
+    </div><div class="day-btn  " onclick="selectDay(&#39;2026-05-10&#39;)">
+      <div class="day-name">Dom</div>
+      <div class="day-num">10</div>
+      <div class="day-avail">5 libres</div>
+    </div></div>
+      <div id="slots-section" style="display:none">
+        <div class="slots-title" id="slots-title"></div>
+        <div class="slots-grid" id="slots-grid"></div>
+      </div>
+      <div id="summary" class="summary" style="display:none"></div>
+      <div id="error-msg" class="error-msg" style="display:none"></div>
+      <div id="booking-form" class="form-card" style="display:none">
+        <div class="form-title">Tus datos</div>
+        <div class="form-row"><label>Nombre completo *</label><input type="text" id="f-nombre" placeholder="Ej: María González" oninput="checkForm()"></div>
+        <div class="form-row"><label>Email *</label><input type="email" id="f-email" placeholder="tu@email.com" oninput="checkForm()"></div>
+        <div class="form-row"><label>Teléfono (opcional)</label><input type="tel" id="f-telefono" placeholder="+54 11 1234-5678"></div>
+        <button class="btn-confirm" id="btn-confirm" disabled="" onclick="confirmBooking()">Confirmar turno</button>
+      </div>
+    </div>
+
+    <div class="success" id="success-view">
+      <div class="success-icon">✓</div>
+      <h2>¡Turno confirmado!</h2>
+      <p style="color:#888;margin-top:4px">Te esperamos en la cancha</p>
+      <div class="booking-box" id="success-detail"></div>
+      <p style="font-size:13px;color:#888" id="success-email"></p>
+      <button class="btn-new" onclick="newBooking()">Reservar otro turno</button>
+    </div>
+  </div>
+
+  <!-- ADMIN VIEW -->
+  <div id="admin-view" style="display:none">
+    <div id="admin-login" class="login-card">
+      <div class="form-title">Acceso administrador</div>
+      <div class="form-row"><label>Contraseña</label><input type="password" id="admin-pwd" placeholder="••••••••" onkeydown="if(event.key===&#39;Enter&#39;)adminLogin()"></div>
+      <button class="btn-confirm" onclick="adminLogin()">Entrar</button>
+    </div>
+    <div id="admin-panel" style="display:none">
+      <div class="stats">
+        <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total</div></div>
+        <div class="stat"><div class="stat-num teal" id="stat-confirm">0</div><div class="stat-label">Confirmados</div></div>
+        <div class="stat"><div class="stat-num" id="stat-today">0</div><div class="stat-label">Hoy</div></div>
+      </div>
+      <div class="filter-row">
+        <select id="filter-estado" onchange="renderAdmin()">
+          <option value="all">Todos</option>
+          <option value="confirmado">Confirmados</option>
+          <option value="cancelado">Cancelados</option>
+        </select>
+        <input type="text" id="filter-search" placeholder="Buscar..." oninput="renderAdmin()">
+        <button class="btn-sm" onclick="loadAdmin()">↻</button>
+      </div>
+      <div id="admin-table"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://glwcnlxtzmdlxcxkqbbp.supabase.co'
+const SUPABASE_KEY = 'sb_publisable_XdlIkaJUp2MFzZ29BaBh9A_8iFboeYj'
+const ADMIN_PWD = 'admin123'
+const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+const DAY_NAMES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
+const DAY_FULL = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']
+const SCHEDULE = {1:'14:00-19:30',2:'14:00-19:30',3:'14:00-19:30',4:'14:00-19:30',5:'14:00-19:30',6:'08:00-17:00',0:'09:00-14:00'}
+
+let weekOffset=0, selectedDate=null, selectedSlot=null, takenSlots={}, allBookings=[]
+
+function dbFetch(path, opts={}) {
+  return fetch(SUPABASE_URL+'/rest/v1/'+path, {
+    headers: {'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=representation',...(opts.headers||{})},
+    ...opts
+  }).then(r=>r.json())
+}
+
+function getSlots(date) {
+  const dow=date.getDay(), s=SCHEDULE[dow]
+  if(!s) return []
+  const[start,end]=s.split('-').map(t=>{const[h,m]=t.split(':').map(Number);return h*60+m})
+  const slots=[]
+  for(let t=start;t+60<=end;t+=60){
+    const hs=String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')
+    const he=String(Math.floor((t+60)/60)).padStart(2,'0')+':'+String((t+60)%60).padStart(2,'0')
+    slots.push(hs+' - '+he)
+  }
+  return slots
+}
+
+function dateKey(d){return d.toISOString().split('T')[0]}
+function fmtDate(dk){const d=new Date(dk+'T12:00:00');return DAY_FULL[d.getDay()]+' '+d.getDate()+' de '+MONTHS[d.getMonth()]+' '+d.getFullYear()}
+function isPastSlot(date,slot){const now=new Date(),[hStr]=slot.split(' - '),[h,m]=hStr.split(':').map(Number),sd=new Date(date);sd.setHours(h,m,0,0);return sd<=now}
+
+function getWeekDates(offset){
+  const today=new Date(),dow=today.getDay(),mon=new Date(today)
+  mon.setDate(today.getDate()-(dow===0?6:dow-1)+offset*7)
+  return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d})
+}
+
+async function loadAvailability(){
+  const days=getWeekDates(weekOffset)
+  const desde=dateKey(days[0]),hasta=dateKey(days[6])
+  const data=await dbFetch(`reservas?fecha=gte.${desde}&fecha=lte.${hasta}&estado=eq.confirmado&select=fecha,turno`)
+  takenSlots={}
+  if(Array.isArray(data)){data.forEach(r=>{if(!takenSlots[r.fecha])takenSlots[r.fecha]=[];takenSlots[r.fecha].push(r.turno)})}
+  renderCalendar()
+}
+
+function renderCalendar(){
+  const days=getWeekDates(weekOffset)
+  const today=new Date();today.setHours(0,0,0,0)
+  const fd=days[0],ld=days[6]
+  document.getElementById('week-label').textContent=fd.getDate()+' '+MONTHS[fd.getMonth()]+' – '+ld.getDate()+' '+MONTHS[ld.getMonth()]+' '+ld.getFullYear()
+  const grid=document.getElementById('days-grid')
+  grid.innerHTML=days.map(d=>{
+    const dk=dateKey(d),dd=new Date(d);dd.setHours(0,0,0,0)
+    const disabled=dd<today,slots=getSlots(d),taken=(takenSlots[dk]||[]).length,avail=slots.length-taken
+    const isSel=selectedDate&&dateKey(selectedDate)===dk
+    return `<div class="day-btn ${disabled?'disabled':''} ${isSel?'selected':''}" onclick="${disabled||!slots.length?'':'selectDay(\''+dk+'\')'}" >
+      <div class="day-name">${DAY_NAMES[d.getDay()]}</div>
+      <div class="day-num">${d.getDate()}</div>
+      ${!disabled&&slots.length?`<div class="day-avail">${avail} libre${avail!==1?'s':''}</div>`:''}
+    </div>`
+  }).join('')
+}
+
+function selectDay(dk){
+  selectedDate=new Date(dk+'T12:00:00');selectedSlot=null
+  document.getElementById('summary').style.display='none'
+  document.getElementById('booking-form').style.display='none'
+  document.getElementById('error-msg').style.display='none'
+  renderCalendar()
+  renderSlots()
+}
+
+function renderSlots(){
+  const sec=document.getElementById('slots-section')
+  if(!selectedDate){sec.style.display='none';return}
+  sec.style.display='block'
+  document.getElementById('slots-title').textContent='Horarios — '+DAY_FULL[selectedDate.getDay()]+' '+selectedDate.getDate()+' de '+MONTHS[selectedDate.getMonth()]
+  const dk=dateKey(selectedDate),taken=takenSlots[dk]||[],slots=getSlots(selectedDate)
+  document.getElementById('slots-grid').innerHTML=slots.map(slot=>{
+    const isTaken=taken.includes(slot)||isPastSlot(selectedDate,slot),isSel=selectedSlot===slot
+    return `<div class="slot ${isTaken?'taken':''} ${isSel&&!isTaken?'sel':''}" onclick="${isTaken?'':'selectSlot(\''+slot.replace(' ','_').replace(' ','_')+'\')'}">${slot.replace(' - ','–')}</div>`
+  }).join('')
+}
+
+function selectSlot(slotRaw){
+  selectedSlot=slotRaw.replace(/_/g,' ')
+  renderCalendar();renderSlots()
+  const sum=document.getElementById('summary')
+  sum.style.display='block'
+  sum.innerHTML='📅 <strong>'+DAY_FULL[selectedDate.getDay()]+' '+selectedDate.getDate()+' de '+MONTHS[selectedDate.getMonth()]+'</strong> · '+selectedSlot.replace(' - ',' a ')+' hs'
+  document.getElementById('booking-form').style.display='block'
+  document.getElementById('error-msg').style.display='none'
+}
+
+function checkForm(){
+  const n=document.getElementById('f-nombre').value,e=document.getElementById('f-email').value
+  document.getElementById('btn-confirm').disabled=!n||!e
+}
+
+async function confirmBooking(){
+  const nombre=document.getElementById('f-nombre').value
+  const email=document.getElementById('f-email').value
+  const telefono=document.getElementById('f-telefono').value
+  const fecha=dateKey(selectedDate),turno=selectedSlot
+  document.getElementById('btn-confirm').disabled=true
+  document.getElementById('btn-confirm').textContent='Guardando...'
+  const check=await dbFetch(`reservas?fecha=eq.${fecha}&turno=eq.${encodeURIComponent(turno)}&estado=eq.confirmado&select=id`)
+  if(Array.isArray(check)&&check.length>0){
+    showError('Este turno ya fue reservado. Por favor elegí otro.')
+    document.getElementById('btn-confirm').disabled=false
+    document.getElementById('btn-confirm').textContent='Confirmar turno'
+    return
+  }
+  const res=await dbFetch('reservas',{method:'POST',body:JSON.stringify({nombre,email,telefono,fecha,turno,estado:'confirmado'})})
+  if(res&&res[0]&&res[0].id){
+    if(!takenSlots[fecha])takenSlots[fecha]=[]
+    takenSlots[fecha].push(turno)
+    document.getElementById('success-detail').innerHTML='<div style="font-size:13px;color:#888;margin-bottom:4px">'+nombre+'</div><div>'+fmtDate(fecha)+'</div><div class="teal" style="font-size:18px;margin-top:4px">'+turno.replace(' - ',' a ')+' hs</div>'
+    document.getElementById('success-email').textContent='Confirmación enviada a '+email
+    document.getElementById('calendar-view').style.display='none'
+    document.getElementById('success-view').classList.add('show')
+  } else {
+    showError('Error al guardar. Intentá de nuevo.')
+    document.getElementById('btn-confirm').disabled=false
+    document.getElementById('btn-confirm').textContent='Confirmar turno'
+  }
+}
+
+function showError(msg){
+  const el=document.getElementById('error-msg')
+  el.style.display='block';el.textContent=msg
+}
+
+function newBooking(){
+  selectedDate=null;selectedSlot=null
+  document.getElementById('f-nombre').value=''
+  document.getElementById('f-email').value=''
+  document.getElementById('f-telefono').value=''
+  document.getElementById('calendar-view').style.display='block'
+  document.getElementById('success-view').classList.remove('show')
+  document.getElementById('slots-section').style.display='none'
+  document.getElementById('summary').style.display='none'
+  document.getElementById('booking-form').style.display='none'
+  loadAvailability()
+}
+
+function changeWeek(dir){weekOffset+=dir;selectedDate=null;selectedSlot=null;loadAvailability()}
+
+function setTab(t){
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',i===(t==='client'?0:1)))
+  document.getElementById('client-view').style.display=t==='client'?'block':'none'
+  document.getElementById('admin-view').style.display=t==='admin'?'block':'none'
+}
+
+function adminLogin(){
+  if(document.getElementById('admin-pwd').value===ADMIN_PWD){
+    document.getElementById('admin-login').style.display='none'
+    document.getElementById('admin-panel').style.display='block'
+    loadAdmin()
+  } else alert('Contraseña incorrecta')
+}
+
+async function loadAdmin(){
+  allBookings=await dbFetch('reservas?order=fecha.desc,turno.asc&select=*')
+  renderAdmin()
+}
+
+function renderAdmin(){
+  if(!Array.isArray(allBookings))return
+  const today=new Date().toISOString().split('T')[0]
+  const filter=document.getElementById('filter-estado').value
+  const search=document.getElementById('filter-search').value.toLowerCase()
+  let filtered=allBookings.filter(b=>{
+    if(filter!=='all'&&b.estado!==filter)return false
+    if(search&&!b.nombre.toLowerCase().includes(search)&&!b.email.toLowerCase().includes(search))return false
+    return true
+  })
+  document.getElementById('stat-total').textContent=allBookings.length
+  document.getElementById('stat-confirm').textContent=allBookings.filter(b=>b.estado==='confirmado').length
+  document.getElementById('stat-today').textContent=allBookings.filter(b=>b.fecha===today&&b.estado==='confirmado').length
+  if(!filtered.length){document.getElementById('admin-table').innerHTML='<div class="empty">🏓 No hay reservas</div>';return}
+  document.getElementById('admin-table').innerHTML=`<table><thead><tr><th>Cliente</th><th>Fecha</th><th>Horario</th><th>Estado</th><th></th></tr></thead><tbody>${
+    filtered.map(b=>`<tr>
+      <td><div style="font-weight:500">${b.nombre}</div><div style="font-size:12px;color:#888">${b.email}${b.telefono?' · '+b.telefono:''}</div></td>
+      <td style="font-size:13px">${fmtDate(b.fecha)}</td>
+      <td style="font-weight:600">${b.turno.replace(' - ','–')} hs</td>
+      <td><span class="badge ${b.estado==='confirmado'?'badge-ok':'badge-cancel'}">${b.estado==='confirmado'?'Confirmado':'Cancelado'}</span></td>
+      <td>${b.estado==='confirmado'?`<button class="btn-sm btn-cancel" onclick="cancelar(${b.id})">✕ Cancelar</button>`:''}</td>
+    </tr>`).join('')
+  }</tbody></table>`
+}
+
+async function cancelar(id){
+  if(!confirm('¿Cancelar este turno?'))return
+  await dbFetch(`reservas?id=eq.${id}`,{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({estado:'cancelado'})})
+  loadAdmin()
+}
+
+loadAvailability()
+</script>
+
+
+</body></html>
