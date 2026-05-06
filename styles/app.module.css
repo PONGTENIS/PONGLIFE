@@ -1,0 +1,116 @@
+/* ─── Layout ──────────────────────────────────────────────── */
+.page { min-height: 100vh; background: #f8f7f4; display: flex; justify-content: center; padding: 2rem 1rem; }
+.app  { width: 100%; max-width: 700px; }
+
+/* ─── Tabs ────────────────────────────────────────────────── */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid #e5e2d9; margin-bottom: 1.5rem; }
+.tab  { padding: 10px 18px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; background: transparent; color: #888; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; }
+.tab:hover:not(.tabActive) { color: #333; }
+.tabActive { color: #1D9E75; border-bottom-color: #1D9E75; }
+
+/* ─── Header ─────────────────────────────────────────────── */
+.header { margin-bottom: 1.5rem; }
+.header h1 { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+.subtitle { font-size: 14px; font-weight: 400; color: #888; }
+.muted { color: #888; }
+.teal  { color: #1D9E75; }
+.red   { color: #E24B4A; }
+
+/* ─── Week navigation ────────────────────────────────────── */
+.weekNav { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+.weekNav button { background: transparent; border: 1px solid #ddd; border-radius: 8px; padding: 6px 14px; cursor: pointer; font-size: 16px; color: #333; }
+.weekNav button:hover { background: #f0f0ec; }
+.weekLabel { font-size: 14px; font-weight: 500; color: #1a1a1a; flex: 1; text-align: center; }
+
+/* ─── Days grid ──────────────────────────────────────────── */
+.daysGrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 1.5rem; }
+.dayBtn   { border: 1px solid #e5e2d9; border-radius: 8px; padding: 8px 4px; text-align: center; cursor: pointer; background: #fff; transition: all .12s; }
+.dayBtn:hover:not(.disabled) { border-color: #b0d8c8; background: #f0faf5; }
+.daySelected { border: 2px solid #1D9E75 !important; background: #E1F5EE !important; }
+.dayToday    { border-color: #1D9E75; }
+.disabled    { opacity: .4; cursor: not-allowed; }
+.dayName     { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+.dayNum      { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-top: 2px; }
+.daySelected .dayName, .daySelected .dayNum { color: #0F6E56; }
+.availCount  { font-size: 10px; color: #888; margin-top: 2px; }
+
+/* ─── Slots ──────────────────────────────────────────────── */
+.slotsSection { margin-bottom: 1.5rem; }
+.slotsTitle   { font-size: 14px; font-weight: 500; color: #555; margin-bottom: 10px; }
+.slotsGrid    { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.slot         { border: 1px solid #e5e2d9; border-radius: 8px; padding: 10px 6px; text-align: center; cursor: pointer; background: #fff; font-size: 13px; font-weight: 500; color: #1a1a1a; transition: all .12s; }
+.slot:hover:not(.slotTaken)   { border-color: #1D9E75; color: #0F6E56; background: #E1F5EE; }
+.slotSelected { border: 2px solid #1D9E75; background: #E1F5EE; color: #0F6E56; }
+.slotTaken    { background: #f4f3f0; color: #bbb; cursor: not-allowed; text-decoration: line-through; }
+
+/* ─── Summary bar ────────────────────────────────────────── */
+.summaryBar { background: #E1F5EE; border: 1px solid #9FE1CB; border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: #0F6E56; display: flex; align-items: center; gap: 8px; }
+
+/* ─── Error ─────────────────────────────────────────────── */
+.errorMsg { background: #FCEBEB; border: 1px solid #F7C1C1; border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: #791F1F; }
+
+/* ─── Form ───────────────────────────────────────────────── */
+.formCard  { background: #fff; border: 1px solid #e5e2d9; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+.formTitle { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 1rem; }
+.formRow   { margin-bottom: 12px; }
+.formRow label  { display: block; font-size: 13px; color: #555; margin-bottom: 4px; }
+.formRow input  { width: 100%; padding: 9px 12px; font-size: 14px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; font-family: inherit; box-sizing: border-box; }
+.formRow input:focus { outline: none; border-color: #1D9E75; box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
+
+/* ─── Buttons ─────────────────────────────────────────────── */
+.confirmBtn  { width: 100%; padding: 12px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.confirmBtn:hover:not(:disabled)  { background: #0F6E56; }
+.confirmBtn:disabled { background: #e0e0e0; color: #aaa; cursor: not-allowed; }
+.newBtn      { margin-top: 1rem; padding: 10px 24px; border: 1px solid #ddd; border-radius: 8px; background: transparent; cursor: pointer; font-size: 14px; color: #333; font-family: inherit; }
+.newBtn:hover { background: #f4f3f0; }
+.refreshBtn  { padding: 6px 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; font-size: 13px; color: #333; font-family: inherit; }
+.refreshBtn:hover { background: #f4f3f0; }
+.reminderBtn { padding: 5px 10px; background: transparent; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; cursor: pointer; color: #555; font-family: inherit; }
+.reminderBtn:hover:not(:disabled) { color: #1D9E75; border-color: #1D9E75; }
+.reminderBtn:disabled { opacity: .5; cursor: not-allowed; }
+.delBtn      { padding: 5px 10px; background: transparent; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; cursor: pointer; color: #555; font-family: inherit; }
+.delBtn:hover:not(:disabled) { color: #E24B4A; border-color: #E24B4A; background: #FCEBEB; }
+.delBtn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ─── Success ─────────────────────────────────────────────── */
+.successCard    { background: #fff; border: 1px solid #e5e2d9; border-radius: 12px; padding: 2rem; text-align: center; }
+.successCard h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: #1a1a1a; }
+.successIcon    { width: 56px; height: 56px; border-radius: 50%; background: #E1F5EE; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 24px; color: #1D9E75; font-weight: 700; }
+.bookingDetail  { font-size: 15px; font-weight: 500; color: #1a1a1a; margin: 1rem 0; padding: 1rem; background: #f8f7f4; border-radius: 8px; }
+
+/* ─── Email preview ──────────────────────────────────────── */
+.emailPreview { background: #f8f7f4; border: 1px solid #e5e2d9; border-radius: 8px; padding: 12px; font-size: 12px; color: #555; max-height: 120px; overflow: auto; white-space: pre-wrap; line-height: 1.6; text-align: left; }
+
+/* ─── Loading dots ───────────────────────────────────────── */
+.loadingDots { display: flex; align-items: center; gap: 6px; justify-content: center; padding: 1rem 0; }
+.loadingDots span { width: 6px; height: 6px; border-radius: 50%; background: #1D9E75; animation: bounce .7s infinite alternate; }
+.loadingDots span:nth-child(2) { animation-delay: .2s; }
+.loadingDots span:nth-child(3) { animation-delay: .4s; }
+@keyframes bounce { 0% { opacity: .3; transform: scale(.8); } 100% { opacity: 1; transform: scale(1.2); } }
+
+/* ─── Admin ──────────────────────────────────────────────── */
+.adminWrap  { padding-top: .5rem; }
+.statsRow   { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+.statCard   { background: #f8f7f4; border-radius: 8px; padding: 1rem; text-align: center; }
+.statNum    { font-size: 24px; font-weight: 700; color: #1a1a1a; }
+.statLabel  { font-size: 12px; color: #888; margin-top: 2px; }
+.filterRow  { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; }
+.filterRow select, .filterRow input { padding: 7px 10px; font-size: 13px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; font-family: inherit; }
+.filterRow input { flex: 1; }
+.emptyAdmin { text-align: center; padding: 3rem; color: #888; font-size: 14px; }
+
+/* ─── Booking table ──────────────────────────────────────── */
+.bookingTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.bookingTable th { text-align: left; padding: 8px 10px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: #888; border-bottom: 1px solid #e5e2d9; }
+.bookingTable td { padding: 10px; border-bottom: 1px solid #f0f0ec; color: #1a1a1a; vertical-align: middle; }
+.bookingTable tr:hover td { background: #fafaf8; }
+.badge       { display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 600; }
+.badgeOk     { background: #E1F5EE; color: #0F6E56; }
+.badgeCancel { background: #FCEBEB; color: #791F1F; }
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 500px) {
+  .daysGrid  { gap: 4px; }
+  .slotsGrid { grid-template-columns: repeat(3, 1fr); }
+  .statsRow  { grid-template-columns: repeat(2, 1fr); }
+}
